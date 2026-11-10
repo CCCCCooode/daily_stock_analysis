@@ -70,8 +70,20 @@ jobs:
           fi
 
           "$VENV/Scripts/python.exe" -m pip install --upgrade pip
-          "$VENV/Scripts/python.exe" -m pip install -r requirements.txt
-          "$VENV/Scripts/python.exe" -c "import futu; print('✅ futu SDK import OK')"
+
+          # requirements.txt 里有一条 github.com Releases 的直链，内网拉不到
+          # 先用 gh-proxy 镜像把 wheel 下到本地，再从 requirements 里剔除这一条
+          FX_WHEEL="$VENV/fxmacrodata_public_client-0.1.0-py3-none-any.whl"
+          if [ ! -f "$FX_WHEEL" ]; then
+            curl -L --retry 3 -o "$FX_WHEEL" \
+              "https://gh-proxy.com/https://github.com/fxmacrodata/fxmacrodata-public-client/releases/download/v0.1.0/fxmacrodata_public_client-0.1.0-py3-none-any.whl"
+          fi
+
+          grep -v 'fxmacrodata-public-client' requirements.txt > requirements-offline.txt
+          "$VENV/Scripts/python.exe" -m pip install -r requirements-offline.txt
+          "$VENV/Scripts/python.exe" -m pip install "$FX_WHEEL"
+
+          "$VENV/Scripts/python.exe" -c "import futu; print('futu SDK import OK')"
 
           echo 'C:\actions-runner\_work\venvs\dsa\Scripts' >> "$GITHUB_PATH"
       
