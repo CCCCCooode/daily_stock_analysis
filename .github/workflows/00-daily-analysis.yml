@@ -49,17 +49,22 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v5
       
-      - name: 设置 Python 环境
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
-          cache: 'pip'
-      
-      - name: 安装依赖
+      - name: 准备 Python 3.11 环境
+        shell: bash
         run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
-          python -c "import futu; print('✅ futu SDK import OK')"
+          PY_BASE="C:/Python311"
+          "$PY_BASE/python.exe" --version
+
+          VENV="C:/actions-runner/_work/venvs/dsa"
+          if [ ! -f "$VENV/Scripts/python.exe" ]; then
+            "$PY_BASE/python.exe" -m venv "$VENV"
+          fi
+
+          "$VENV/Scripts/python.exe" -m pip install --upgrade pip
+          "$VENV/Scripts/python.exe" -m pip install -r requirements.txt
+          "$VENV/Scripts/python.exe" -c "import futu; print('✅ futu SDK import OK')"
+
+          echo 'C:\actions-runner\_work\venvs\dsa\Scripts' >> "$GITHUB_PATH"
       
       - name: 创建必要目录
         run: |
