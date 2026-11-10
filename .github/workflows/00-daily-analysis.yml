@@ -33,6 +33,12 @@ concurrency:
 jobs:
   analyze:
     runs-on: [self-hosted, Windows]
+    
+    env:
+      GIT_CONFIG_COUNT: '1'
+      GIT_CONFIG_KEY_0: 'url.https://gh-proxy.com/https://github.com/.insteadOf'
+      GIT_CONFIG_VALUE_0: 'https://github.com/'
+    
     defaults:
       run:
         shell: bash
