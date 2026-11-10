@@ -3,7 +3,7 @@ name: 每日分析
 on:
   # 定时触发（北京时间 = UTC+8，GitHub 只认 UTC）
   schedule:
-    - cron: '40 0 * * 1-5'   # 08:40 盘前
+    - cron: '30 0 * * 1-5'   # 08:40 盘前
     - cron: '35 3 * * 1-5'   # 11:35 盘中（午间休市，上午数据已定型）
     - cron: '0 10 * * 1-5'   # 18:00 盘后
 
@@ -481,7 +481,7 @@ jobs:
 
           # 定时触发时按 cron 区分时段；手动触发保持上面的 inputs.mode
           SLOT="${{ github.event.schedule }}"
-          if [ "$SLOT" = "40 0 * * 1-5" ]; then
+          if [ "$SLOT" = "30 0 * * 1-5" ]; then
             MODE="stocks-only"
             echo "🌅 盘前时段：仅个股分析（不使用昨收与隔夜消息）"
           elif [ "$SLOT" = "35 3 * * 1-5" ]; then
