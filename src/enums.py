@@ -20,6 +20,7 @@ class ReportType(str, Enum):
     SIMPLE = "simple"  # 精简报告：使用 generate_single_stock_report
     FULL = "full"      # 完整报告：使用 generate_dashboard_report
     BRIEF = "brief"    # 简洁模式：3-5 句话概括，适合移动端/推送
+    T0 = "t0"          # 日内简报：仅保留实时价格、狙击点位、持仓与风险，面向 T+0 日内交易
 
     @classmethod
     def from_str(cls, value: str) -> "ReportType":
@@ -47,4 +48,5 @@ class ReportType(str, Enum):
             ReportType.SIMPLE: "精简报告",
             ReportType.FULL: "完整报告",
             ReportType.BRIEF: "简洁报告",
+            ReportType.T0: "日内简报",
         }.get(self, "精简报告")
