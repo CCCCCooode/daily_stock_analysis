@@ -446,6 +446,8 @@ class NotificationService(
         normalized_type = self._normalize_report_type(report_type)
         if normalized_type == ReportType.BRIEF:
             return self.generate_brief_report(results, report_date=report_date)
+        if normalized_type == ReportType.T0:
+            return self.generate_t0_report(results, report_date=report_date)
         return self.generate_dashboard_report(results, report_date=report_date)
 
     def _collect_models_used(self, results: List[AnalysisResult]) -> List[str]:
