@@ -57,7 +57,21 @@ jobs:
       
       - name: 检出代码
         uses: actions/checkout@v5
-      
+        
+      - name: 调试股票列表
+        shell: bash
+        env:
+          STOCK_LIST_CONFIG: ${{ vars.STOCK_LIST || secrets.STOCK_LIST }}
+        run: |
+          echo "===== 1. Secret/Variable 实际传入 ====="
+          echo "$STOCK_LIST_CONFIG" | tr ',' '\n'
+          echo "===== 2. 机器环境变量 ====="
+          echo "${STOCK_LIST:-（空）}"
+          echo "===== 3. runner .env 文件 ====="
+          cat /c/actions-runner/.env 2>/dev/null || echo "（无 .env）"
+          echo "===== 4. 仓库里搜 600519 ====="
+          grep -rn "600519" --include="*.py" --include="*.json" --include="*.env*" --include="*.yml" . 2>/dev/null | head -10 || echo "（仓库里没有）"
+          
       - name: 准备 Python 3.11 环境
         shell: bash
         run: |
